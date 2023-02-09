@@ -104,14 +104,16 @@ getMoney(userData, bankData)
             if ((`${obj.bankData[valuta1]}`) === "undefined") {
                 console.log("В данный момент этой валюты нет в банкомате.");
             } else {
-
                 let summ;
                 summ = +prompt("Введите сумму для снятия наличных");
 
                 if (summ > `${obj.userData[valuta1]}`) {
-                    console.log("У вас не достаточно средств на счету, введи меньше сумму.");
+                    console.log("У вас не достаточно средств на счету, введите меньше сумму.");
                 } else {
-                    if (summ < `${obj.bankData[valuta1].min}`) {
+
+                    if ((`${obj.bankData[valuta1].max}`) === "0") {
+                        console.log("Наличные средства закончились, остаток 0, в ближайшее время будет инкасация.");
+                    } else if (summ < `${obj.bankData[valuta1].min}`) {
                         console.log(`Введенная сумма меньше допустимой. Минимальная сумма снятия: ${obj.bankData[valuta1].min} ${valuta1}`);
                     } else if (summ > `${obj.bankData[valuta1].max}`) {
                         console.log(`Введенная сумма больше допустимой. Максимальная сумма снятия: ${obj.bankData[valuta1].max} ${valuta1}`);
