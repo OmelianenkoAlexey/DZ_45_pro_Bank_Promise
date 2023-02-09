@@ -8,34 +8,34 @@
 // Входящие данные:
 
 let userData = {
-    'USD': 1000,
-    'EUR': 900,
-    'UAH': 15000,
-    'BIF': 20000,
-    'AOA': 100
+    USD: 1000,
+    EUR: 900,
+    UAH: 15000,
+    BIF: 20000,
+    AOA: 100,
 },
     bankData = {
-        'USD': {
+        USD: {
             max: 3000,
             min: 100,
-            img: '💵'
+            img: "💵",
         },
-        'EUR': {
+        EUR: {
             max: 1000,
             min: 50,
-            img: '💶'
+            img: "💶",
         },
-        'UAH': {
+        UAH: {
             max: 0,
             min: 0,
-            img: '💴'
+            img: "💴",
         },
-        'GBP': {
+        GBP: {
             max: 10000,
             min: 100,
-            img: '💷'
-        }
-    }
+            img: "💷",
+        },
+    };
 
 // Для этого пишем функцию getMoney, которая:
 
@@ -67,47 +67,110 @@ let userData = {
 
 function getMoney(userData, bankData) {
     return new Promise((resolve, reject) => {
-        (confirm("Посмотреть баланс на карте?")) ? resolve(userData) : reject({ userData: userData, bankData: bankData });
-    })
+        confirm("Посмотреть баланс на карте?")
+            ? resolve(userData)
+            : reject({ userData: userData, bankData: bankData });
+    });
 }
 
-const valuta = () => {
-    let valuta;
+function valuta(obj) {
+    let data = [];
+    for (let key in obj) {
+        data.push(key);
+    }
+
+    let ok = true;
+    let valuta1;
     do {
-        valuta = prompt("Введите название валюты в формате USD, EUR, UAH, BIF, AOA").toUpperCase();
-    } while (valuta !== "USD" && valuta !== "EUR" && valuta !== "UAH" && valuta !== "BIF"
-        && valuta !== "AOA");
-    return valuta;
-};
+        valuta1 = prompt(`Введите название валюты в формате ${data.join(", ")}`).toUpperCase();
+        data.forEach((item) => {
+            if (valuta1 === item) {
+                ok = false;
+            }
+        });
+    } while (ok);
+    return valuta1;
+}
 
 getMoney(userData, bankData)
     .then(
-        obj => {
-            const valuta1 = valuta();
+        (obj) => {
+            const valuta1 = valuta(userData);
             console.log(`Баланс составляет: ${obj[valuta1]} ${valuta1}`);
         },
-        obj => {
-            const valuta1 = valuta();
+        (obj) => {
+            const valuta1 = valuta(userData);
 
-            if (valuta1 === "BIF") {
-               return console.log(`В данный момент в банкомате отсутвствует ваша валюта ${valuta1}`);
-            }
-
-            let summ;
-            summ = +prompt("Введите сумму для снятия наличных");
-
-            if (summ > `${obj.bankData[valuta1].max}`) {
-                (`${obj.bankData[valuta1].max}` === "0") ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты")
-                    : console.log(`Введенная сумма больше допустимой. Максимальная сумма снятия: ${obj.bankData[valuta1].max} ${valuta1}`);
-            } else if (summ < `${obj.bankData[valuta1].min}`) {
-                (`${obj.bankData[valuta1].min}` === "0") ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты")
-                    : console.log(`Введенная сумма меньше допустимой. Минимальная сумма снятия: ${obj.bankData[valuta1].min} ${valuta1}`);
+            if ((`${obj.bankData[valuta1]}`) === "undefined") {
+                console.log("В данный момент этой валюты нет в банкомате.");
             } else {
-                (`${summ}` === 0) ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты") :
-                    console.log(`Вот Ваши денежки ${summ} ${valuta1} ${obj.bankData[valuta1].img}.`);
+
+                let summ;
+                summ = +prompt("Введите сумму для снятия наличных");
+
+                if (summ > `${obj.userData[valuta1]}`) {
+                    console.log("У вас не достаточно средств на счету, введи меньше сумму.");
+                } else {
+                    if (summ < `${obj.bankData[valuta1].min}`) {
+                        console.log(`Введенная сумма меньше допустимой. Минимальная сумма снятия: ${obj.bankData[valuta1].min} ${valuta1}`);
+                    } else if (summ > `${obj.bankData[valuta1].max}`) {
+                        console.log(`Введенная сумма больше допустимой. Максимальная сумма снятия: ${obj.bankData[valuta1].max} ${valuta1}`);
+                    } else {
+                        console.log(`Вот Ваши денежки ${summ} ${valuta1} ${obj.bankData[valuta1].img}.`);
+                    }
+                }
             }
+
+
         }
     )
-    .finally(
-        () => console.log("Спасибо, хорошего дня.")
-    )
+    .finally(() => console.log("Спасибо, хорошего дня."));
+
+// !!!!!!!!!!!!!!!!
+
+// function getMoney(userData, bankData) {
+//     return new Promise((resolve, reject) => {
+//         (confirm("Посмотреть баланс на карте?")) ? resolve(userData) : reject({ userData: userData, bankData: bankData });
+//     })
+// }
+
+// const valuta = () => {
+//     let valuta;
+//     do {
+//         valuta = prompt("Введите название валюты в формате USD, EUR, UAH, BIF, AOA").toUpperCase();
+//     } while (valuta !== "USD" && valuta !== "EUR" && valuta !== "UAH" && valuta !== "BIF"
+//         && valuta !== "AOA");
+//     return valuta;
+// };
+
+// getMoney(userData, bankData)
+//     .then(
+//         obj => {
+//             const valuta1 = valuta();
+//             console.log(`Баланс составляет: ${obj[valuta1]} ${valuta1}`);
+//         },
+//         obj => {
+//             const valuta1 = valuta();
+
+//             if (valuta1 === "BIF") {
+//                return console.log(`В данный момент в банкомате отсутвствует ваша валюта ${valuta1}`);
+//             }
+
+//             let summ;
+//             summ = +prompt("Введите сумму для снятия наличных");
+
+//             if (summ > `${obj.bankData[valuta1].max}`) {
+//                 (`${obj.bankData[valuta1].max}` === "0") ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты")
+//                     : console.log(`Введенная сумма больше допустимой. Максимальная сумма снятия: ${obj.bankData[valuta1].max} ${valuta1}`);
+//             } else if (summ < `${obj.bankData[valuta1].min}`) {
+//                 (`${obj.bankData[valuta1].min}` === "0") ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты")
+//                     : console.log(`Введенная сумма меньше допустимой. Минимальная сумма снятия: ${obj.bankData[valuta1].min} ${valuta1}`);
+//             } else {
+//                 (`${summ}` === 0) ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты") :
+//                     console.log(`Вот Ваши денежки ${summ} ${valuta1} ${obj.bankData[valuta1].img}.`);
+//             }
+//         }
+//     )
+//     .finally(
+//         () => console.log("Спасибо, хорошего дня.")
+//     )
