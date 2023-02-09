@@ -88,6 +88,11 @@ getMoney(userData, bankData)
         },
         obj => {
             const valuta1 = valuta();
+
+            if (valuta1 === "BIF") {
+               return console.log(`В данный момент в банкомате отсутвствует ваша валюта ${valuta1}`);
+            }
+
             let summ;
             summ = +prompt("Введите сумму для снятия наличных");
 
@@ -102,7 +107,7 @@ getMoney(userData, bankData)
                     : console.log(`Введенная сумма меньше допустимой. Минимальная сумма снятия: ${obj.bankData[valuta1].min} ${valuta1}`);
 
             } else {
-                (`${summ}` === "0") ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты") :
+                (`${summ}` === 0) ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты") :
                     console.log(`Вот Ваши денежки ${summ} ${valuta1} ${obj.bankData[valuta1].img}.`);
             }
         }
