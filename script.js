@@ -90,16 +90,23 @@ getMoney(userData, bankData)
             const valuta1 = valuta();
             let summ;
             summ = +prompt("Введите сумму для снятия наличных");
+
             if (summ > `${obj.bankData[valuta1].max}`) {
-                console.log(`Введенная сумма больше допустимой. Максимальная сумма снятия: ${obj.bankData[valuta1].max} ${valuta1}`);
+
+                (`${obj.bankData[valuta1].max}` === "0") ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты")
+                    : console.log(`Введенная сумма больше допустимой. Максимальная сумма снятия: ${obj.bankData[valuta1].max} ${valuta1}`);
+
             } else if (summ < `${obj.bankData[valuta1].min}`) {
-                console.log(`Введенная сумма меньше допустимой. Минимальная сумма снятия: ${obj.bankData[valuta1].min} ${valuta1}`);
+
+                (`${obj.bankData[valuta1].min}` === "0") ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты")
+                    : console.log(`Введенная сумма меньше допустимой. Минимальная сумма снятия: ${obj.bankData[valuta1].min} ${valuta1}`);
+
             } else {
-                console.log(`Вот Ваши денежки ${summ} ${valuta1} ${obj.bankData[valuta1].img}.`);
+                (`${summ}` === "0") ? console.log("В данный момент в банкомате совсем нет купюр вашей валюты") :
+                    console.log(`Вот Ваши денежки ${summ} ${valuta1} ${obj.bankData[valuta1].img}.`);
             }
         }
     )
     .finally(
-
         () => console.log("Спасибо, хорошего дня.")
     )
